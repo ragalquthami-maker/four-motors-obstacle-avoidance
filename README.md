@@ -38,7 +38,7 @@ When the distance is 10 cm or less:
 
 [circuit.jpeg](./circuit.jpeg)
 
-[simulation.mov](./simulation.mov)
+[simulation.mov](./Simulation.mov)
 
 ## Circuit
 
