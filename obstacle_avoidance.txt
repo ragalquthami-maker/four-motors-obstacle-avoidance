@@ -1,0 +1,121 @@
+#include <Servo.h>
+
+#define M1_IN1 2
+#define M1_IN2 4
+#define M1_EN 3
+
+#define M2_IN1 7
+#define M2_IN2 8
+#define M2_EN 5
+
+#define M3_IN1 12
+#define M3_IN2 13
+#define M3_EN 6
+
+#define M4_IN1 10
+#define M4_IN2 11
+#define M4_EN 9
+
+#define TRIG_PIN A1
+#define ECHO_PIN A2
+#define SERVO_PIN A0
+
+Servo myServo;
+
+void setup() {
+  pinMode(M1_IN1, OUTPUT);
+  pinMode(M1_IN2, OUTPUT);
+  pinMode(M1_EN, OUTPUT);
+
+  pinMode(M2_IN1, OUTPUT);
+  pinMode(M2_IN2, OUTPUT);
+  pinMode(M2_EN, OUTPUT);
+
+  pinMode(M3_IN1, OUTPUT);
+  pinMode(M3_IN2, OUTPUT);
+  pinMode(M3_EN, OUTPUT);
+
+  pinMode(M4_IN1, OUTPUT);
+  pinMode(M4_IN2, OUTPUT);
+  pinMode(M4_EN, OUTPUT);
+
+  pinMode(TRIG_PIN, OUTPUT);
+  pinMode(ECHO_PIN, INPUT);
+
+  myServo.attach(SERVO_PIN);
+  myServo.write(90);
+
+  digitalWrite(M1_EN, HIGH);
+  digitalWrite(M2_EN, HIGH);
+  digitalWrite(M3_EN, HIGH);
+  digitalWrite(M4_EN, HIGH);
+}
+
+void loop() {
+  float distance = getDistance();
+
+  if (distance <= 10) {
+    stopMotors();
+
+    myServo.write(0);
+    delay(700);
+
+    myServo.write(180);
+    delay(700);
+
+    myServo.write(90);
+    delay(700);
+
+    stopMotors();
+  } 
+  else {
+    moveForward();
+  }
+
+  delay(100);
+}
+
+float getDistance() {
+  digitalWrite(TRIG_PIN, LOW);
+  delayMicroseconds(2);
+
+  digitalWrite(TRIG_PIN, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(TRIG_PIN, LOW);
+
+  long duration = pulseIn(ECHO_PIN, HIGH, 30000);
+
+  if (duration == 0) {
+    return 999;
+  }
+
+  return duration * 0.0343 / 2;
+}
+
+void moveForward() {
+  digitalWrite(M1_IN1, HIGH);
+  digitalWrite(M1_IN2, LOW);
+
+  digitalWrite(M2_IN1, HIGH);
+  digitalWrite(M2_IN2, LOW);
+
+  digitalWrite(M3_IN1, HIGH);
+  digitalWrite(M3_IN2, LOW);
+
+  digitalWrite(M4_IN1, HIGH);
+  digitalWrite(M4_IN2, LOW);
+}
+
+void stopMotors() {
+  digitalWrite(M1_IN1, LOW);
+  digitalWrite(M1_IN2, LOW);
+
+  digitalWrite(M2_IN1, LOW);
+  digitalWrite(M2_IN2, LOW);
+
+  digitalWrite(M3_IN1, LOW);
+  digitalWrite(M3_IN2, LOW);
+
+  digitalWrite(M4_IN1, LOW);
+  digitalWrite(M4_IN2, LOW);
+}
